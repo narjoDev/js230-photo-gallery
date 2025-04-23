@@ -86,7 +86,7 @@ a.favorite {
   padding: 15px;
   line-height: 140%;
   color: #fff;
-  background: rgba(0, 0, 0, .7);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 #slideshow a.prev,
