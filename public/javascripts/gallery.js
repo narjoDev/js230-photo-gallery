@@ -4,11 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const info = document.querySelector("section > header");
   const comments = document.getElementById("comments");
 
-  let photos;
-
-  const templateFromId = (id) =>
-    Handlebars.compile(document.getElementById(id).innerHTML);
-
   const templates = {
     photos: templateFromId("photos"),
     information: templateFromId("photo_information"),
@@ -19,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "photo_comment",
     document.getElementById("photo_comment").innerHTML
   );
+
+  let photos;
 
   getPhotos()
     .then(renderPhotos)
@@ -51,5 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       request.send();
     });
+  }
+
+  function templateFromId(id) {
+    return Handlebars.compile(document.getElementById(id).innerHTML);
   }
 });
