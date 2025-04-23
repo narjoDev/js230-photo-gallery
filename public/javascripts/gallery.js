@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const slideshow = document.getElementById("slideshow");
   const slides = document.getElementById("slides");
   const info = document.querySelector("section > header");
-  const comments = document.getElementById("comments");
+  const commentList = document.querySelector("#comments > ul");
 
   const templates = {
     photos: templateFromId("photos"),
@@ -19,12 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   getPhotos()
     .then(renderPhotos)
-    .then(() => renderInfo(0));
+    .then(() => renderInfo(0))
+    .then(() => getComments(photos[0].id))
+    .then(renderComments);
 
   async function getPhotos() {
     return await get("/photos").then((photosJson) => {
       photos = photosJson;
     });
+  }
+
+  async function getComments(photo_id) {
+    return await get(`/comments?photo_id=${photo_id}`);
   }
 
   function renderPhotos() {
@@ -33,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderInfo(index) {
     info.innerHTML = templates.information(photos[index]);
+  }
+
+  function renderComments(comments) {
+    commentList.innerHTML = templates.comments({ comments });
   }
 
   function get(url) {
