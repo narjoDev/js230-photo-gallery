@@ -66,15 +66,18 @@ a.favorite {
   margin: 0;
   width: 100%;
   height: 784px;
+  transition: opacity 1s, visibility 1s;
 }
 
 #slides figure + figure,
 #slides > figure.inactive {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
 }
 
 #slides > figure.active {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 #slides img {
