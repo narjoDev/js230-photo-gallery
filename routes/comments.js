@@ -4,6 +4,8 @@ var fs = require("fs");
 var path = require("path");
 var _ = require("underscore");
 var md5 = require("MD5");
+const multer = require("multer");
+const upload = multer();
 
 var comments = JSON.parse(fs.readFileSync(path.resolve(path.dirname(__dirname), "data/comments.json"), "utf8"));
 
@@ -23,7 +25,7 @@ router.get("/comments", function(req, res) {
   res.json(photo_comments);
 });
 
-router.post("/comments/new", function(req, res) {
+router.post("/comments/new", upload.none(), function(req, res) {
   var comment = {};
 
   comment.body = req.body.body;

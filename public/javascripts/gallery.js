@@ -137,11 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(formData);
     fetch(action, {
       method,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      // body: formData,
-      body: params,
+      // headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded",
+      // },
+      body: formData,
+      // body: params,
     })
       .then((response) => response.json())
       .then((comment) => {
