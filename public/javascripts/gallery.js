@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const slides = document.getElementById("slides");
   const info = document.querySelector("section > header");
   const commentList = document.querySelector("#comments > ul");
+  const form = document.querySelector("form");
 
   const templates = {
     photos: templateFromId("photos"),
     information: templateFromId("photo_information"),
     comments: templateFromId("photo_comments"),
+    comment: templateFromId("photo_comment"),
   };
 
   Handlebars.registerPartial(
@@ -28,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".next").addEventListener("click", next);
 
   info.addEventListener("click", handleAction);
+  form.addEventListener("submit", handleForm);
 
   async function getPhotos() {
     return await get("/photos").then((photosJson) => {
@@ -121,5 +124,29 @@ document.addEventListener("DOMContentLoaded", () => {
         //refresh info but maintain focus change if happened
         renderInfo(activeIndex);
       });
+  }
+
+  function handleForm(event) {
+    event.preventDefault();
+
+    let formData = new FormData(form);
+    formData.set("photo_id", photos[activeIndex].id);
+    let params = new URLSearchParams(formData);
+    let { action, method } = form;
+
+    console.log(formData);
+    fetch(action, {
+      method,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      // body: formData,
+      body: params,
+    })
+      .then((response) => response.json())
+      .then((comment) => {
+        commentList.insertAdjacentHTML("beforeend", templates.comment(comment));
+      });
+    form.reset();
   }
 });
