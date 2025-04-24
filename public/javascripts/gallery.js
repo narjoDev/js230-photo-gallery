@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".prev").addEventListener("click", previous);
   document.querySelector(".next").addEventListener("click", next);
 
+  info.addEventListener("click", handleAction);
+
   async function getPhotos() {
     return await get("/photos").then((photosJson) => {
       photos = photosJson;
@@ -90,5 +92,34 @@ document.addEventListener("DOMContentLoaded", () => {
     newActive.classList.add("active");
     renderInfo(activeIndex);
     getComments(newId).then(renderComments);
+  }
+
+  function handleAction(event) {
+    if (event.target.tagName !== "A") return;
+    event.preventDefault();
+
+    const {
+      href,
+      dataset: { id, property },
+    } = event.target;
+
+    //in case active changes before fetch completes
+    let cacheActiveIndex = activeIndex;
+    fetch(href, {
+      method: "post",
+      headers: {
+        //"Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      // body: JSON.stringify({ photo_id: id }),
+      body: `photo_id=${id}`,
+    })
+      .then((response) => response.json())
+      .then(({ total }) => {
+        //update property on what was active
+        photos[cacheActiveIndex][property] = total;
+        //refresh info but maintain focus change if happened
+        renderInfo(activeIndex);
+      });
   }
 });
