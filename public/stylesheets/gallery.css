@@ -68,8 +68,13 @@ a.favorite {
   height: 784px;
 }
 
-#slides figure + figure {
+#slides figure + figure,
+#slides > figure.inactive {
   display: none;
+}
+
+#slides > figure.active {
+  display: block;
 }
 
 #slides img {
